@@ -4,11 +4,14 @@ import querystring from 'node:querystring';
 import axios from 'axios';
 
 router.get('/', async (req, res) => {
-    const config = {
-        headers: { Authorization: `Bearer ${req.query.code}` }
-    };
-
-    const { data } = await axios.get('https://api.spotify.com/v1/search?q=famous', config);
+    const { data } = await axios.get(
+        'https://api.spotify.com/v1/search?q=famous', 
+        { 
+            headers: {
+                'Authorization': 'Bearer ' + req.query.code
+            }
+        }
+    );
 
     res.json(data);
 });
