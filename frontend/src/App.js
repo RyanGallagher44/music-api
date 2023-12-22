@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Navigation />
-      <div className="App">
+      <div className="App bg-gray-50">
         <div className="App-body">
           <Routes>
             <Route path="/" element={<Login />} />
