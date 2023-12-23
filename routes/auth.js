@@ -11,7 +11,7 @@ let client_secret = process.env.client_secret;
 let redirect_uri = process.env.redirect_uri;
 
 router.get('/login', (req, res) => {
-    const scope = 'user-read-private user-read-email';
+    const scope = 'user-read-private user-read-email user-follow-read';
     res.redirect(`https://accounts.spotify.com/authorize?${querystring.stringify({
         response_type: 'code',
         client_id,
