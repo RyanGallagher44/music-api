@@ -4,6 +4,7 @@ import querystring from 'node:querystring';
 import { config } from 'dotenv';
 import axios from 'axios';
 
+
 router.post('/search', async (req, res) => {
     // https://api.spotify.com/v1/search?q=artist&type=artist
     let searchTerm = req.body.searchTerm

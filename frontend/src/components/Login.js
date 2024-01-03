@@ -21,7 +21,7 @@ const Login = () => {
                         }
                     });
                     setUserData(data);
-
+                    console.log(data)
                     const data2 = await axios.get('https://api.spotify.com/v1/me/following?type=artist', {
                         headers: {
                             Authorization: 'Bearer ' + token
