@@ -24,10 +24,7 @@ const Navigation = () => {
                             <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-spotify-green md:p-0 md:dark:text-spotify-green" aria-current="page">Home</a>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:text-spotify-green md:hover:bg-transparent md:hover:text-spotify-green md:p-0 md:dark:hover:text-spotify-green dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Artists</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:text-spotify-green md:hover:bg-transparent md:hover:text-spotify-green md:p-0 md:dark:hover:text-spotify-green dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Search</a>
+                            <a href="/artists" class="block py-2 px-3 text-gray-900 rounded hover:text-spotify-green md:hover:bg-transparent md:hover:text-spotify-green md:p-0 md:dark:hover:text-spotify-green dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Artists</a>
                         </li>
                     </ul>
                 </div>

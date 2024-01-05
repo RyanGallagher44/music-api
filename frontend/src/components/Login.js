@@ -58,7 +58,7 @@ const Login = () => {
             {token && !loading && (
                 <div>
                     <h1 className="mt-36">Welcome, {userData.display_name}</h1>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                    {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
                         {userFollowingData.map((artist) => (
                             <div key={artist.id}>
                                 <div className="col-span-1 justify-center items-center flex">
@@ -70,7 +70,7 @@ const Login = () => {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
             )}
         </div>

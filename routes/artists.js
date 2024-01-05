@@ -1,9 +1,6 @@
 import {Router} from "express"
 const router = Router();
-import querystring from 'node:querystring';
-import { config } from 'dotenv';
 import axios from 'axios';
-
 
 router.post('/search', async (req, res) => {
     // https://api.spotify.com/v1/search?q=artist&type=artist
@@ -16,9 +13,5 @@ router.post('/search', async (req, res) => {
     })
     res.json(data)
 });
-// req/res
-
-
-
 
 export default router;
