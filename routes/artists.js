@@ -17,9 +17,9 @@ router.post('/search', async (req, res) => {
 router.post(`/:id`, async (req, res) => {
     let accessToken = req.body.accessToken
     let id = req.params.id
-    let {data} = await axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks`, {
+    let {data} = await axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=US`, {
         headers: {
-        Authorization: 'Bearer' + accessToken
+        Authorization: 'Bearer ' + accessToken
         }
     })
     res.json(data)
