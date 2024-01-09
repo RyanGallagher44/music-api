@@ -10,7 +10,7 @@ const Artist = () => {
     const { id } = useParams();
     useEffect(() => {
         async function fetchData() {
-          let {data} = await axios.post(`http://localhost:3030/artist/${id}`, {
+          let {data} = await axios.post(`http://localhost:3030/artist/${id}/top-tracks`, {
                 accessToken:localStorage.getItem("access_token")
                 
             })
@@ -39,6 +39,7 @@ const Artist = () => {
                 </div>
                     )
             })}
+            
     </div>
 ); 
     }

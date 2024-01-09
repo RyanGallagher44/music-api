@@ -5,6 +5,7 @@ const constructorMethod = (app) => {
     app.use('/auth', authRoutes);
     app.use('/artist', artistRoutes);
 
+
     app.use('*', (req, res) => {
         res.status(404).json({error: "This route does not exist"});
     });
