@@ -3,11 +3,13 @@ import {Link, useParams} from 'react-router-dom';
 import {useEffect} from 'react'
 import {useState} from "react"
 import axios from "axios"
+import Track from "./Track";
 
 const Artist = () => {
     const [tracks, setTracks] = useState(undefined)
     const [albums, setAlbums] = useState(undefined)
     const [loading, setLoading] = useState(true)
+    const [hoveredTrack, setHoveredTrack] = useState(null);
     const { id } = useParams();
 
     useEffect(() => {
@@ -26,10 +28,15 @@ const Artist = () => {
             setLoading(false)
         }
         fetchData()
-
-
-
     },[id])
+
+    const handleTrackHover = (id) => {
+        setHoveredTrack(id);
+    };
+
+    const handleTrackLeave = () => {
+        setHoveredTrack(null);
+    };
 
     if (loading) {
         return (
@@ -45,16 +52,17 @@ const Artist = () => {
         <h1>Top Tracks</h1>
             {tracks.map((track) => {
                 return (
-                <Link to={`/track/${track.id}`}>
-                    <div className="img">
-                      <img className="rounded-full" src={track.album.images[0].url} />
+                    <div key={track.id}>
+                        <div className="img">
+                          <img onMouseOver={() => handleTrackHover(track.id)} onMouseLeave={handleTrackLeave} className="transform transition duration-500 hover:scale-105 object-cover rounded-full" src={track.album.images[0].url} />
+                        </div>
+                           {track.name}
+                        <div>
+                          {track.album.release_date.split("-")[0]}
+                        </div>
+                        {hoveredTrack === track.id && <Track id={track.id} />}
                     </div>
-                       {track.name}
-                    <div>
-                      {track.album.release_date.split("-")[0]}
-                    </div>
-                </Link>
-                    )
+                );
             })}
             {albums.map((album) => {
                 return (

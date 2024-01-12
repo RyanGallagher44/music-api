@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
 import axios from "axios";
 import ReactPlayer from "react-player";
 
-const Track = () => {
+const Track = ({id}) => {
     const [loading, setLoading] = useState(true);
     const [track, setTrack] = useState(undefined);
     const [playerReady, setPlayerReady] = useState(false);
-    const { id } = useParams();
 
     useEffect(() => {
         async function fetchData () {
@@ -32,20 +30,20 @@ const Track = () => {
     }
 
     if (loading) {
-        return (<div>Loading...</div>);
+        return (<div></div>);
     } else {
         return (
-            <div className="mt-32">
-                {track.preview_url &&
-                        <ReactPlayer
-                            url={track.preview_url}
-                            playing={true}
-                            loop={true}
-                            width="100%"
-                            height="50px"
-                            onReady={handlePlayerReady}
-                        />
-                }
+            <div style={{display: "none"}}>
+                {track.preview_url && (
+                    <ReactPlayer
+                        url={track.preview_url}
+                        playing={true}
+                        loop={true}
+                        width="100%"
+                        height="50px"
+                        onReady={handlePlayerReady}
+                    />
+                )}
             </div>
         );
     }
