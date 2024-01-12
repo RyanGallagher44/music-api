@@ -33,11 +33,7 @@ router.post(`/:id/albums`, async (req, res) => {
             Authorization: 'Bearer ' + accessToken
         }
     })
-    let names = []
-    data.items.forEach ((album) => {
-        names.push(album.name)
-    })
-    res.json(names)
+    res.json(data)
 })
 
 
