@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {useEffect} from 'react'
 import {useState} from "react"
 import axios from "axios"
@@ -45,15 +45,15 @@ const Artist = () => {
         <h1>Top Tracks</h1>
             {tracks.map((track) => {
                 return (
-                <div>
-                <div className="img">
-                  <img className="rounded-full" src={track.album.images[0].url} />
-                </div>
-                   {track.name}
-                <div>
-                  {track.album.release_date.split("-")[0]}
-                </div>
-                </div>
+                <Link to={`/track/${track.id}`}>
+                    <div className="img">
+                      <img className="rounded-full" src={track.album.images[0].url} />
+                    </div>
+                       {track.name}
+                    <div>
+                      {track.album.release_date.split("-")[0]}
+                    </div>
+                </Link>
                     )
             })}
             {albums.map((album) => {
