@@ -1,9 +1,11 @@
 import authRoutes from './auth.js';
-import artistRoutes from "./artists.js"
+import artistRoutes from "./artists.js";
+import trackRoutes from "./tracks.js";
 
 const constructorMethod = (app) => {
     app.use('/auth', authRoutes);
     app.use('/artist', artistRoutes);
+    app.use('/track', trackRoutes);
 
 
     app.use('*', (req, res) => {
