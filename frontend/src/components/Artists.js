@@ -1,5 +1,5 @@
 import axios from "axios"
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import { Link } from "react-router-dom"
 
 export default function Artists() {
@@ -8,6 +8,10 @@ export default function Artists() {
 
     const handleSubmitArtist = async (e) => {
         e.preventDefault();
+
+        if (artist === "") {
+            return;   
+        }
 
         const {data} = await axios.post("http://localhost:3030/artist/search", {
             searchTerm: artist,
