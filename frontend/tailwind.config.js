@@ -7,6 +7,7 @@ module.exports = {
   theme: {
     fontFamily: {
       display: ["Varela Round", "sans-serif"],
+      gotham: ["Gotham", "sans-serif"],
     },
     extend: {
       colors: {

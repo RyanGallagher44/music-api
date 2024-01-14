@@ -18,6 +18,17 @@ router.post(`/search`, async (req, res) => {
   res.json(data);
 });
 
+router.post(`/:id`, async (req, res) => {
+  let accessToken = req.body.accessToken;
+  let id = req.params.id;
+  const { data } = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  res.json(data);
+});
+
 router.post(`/:id/top-tracks`, async (req, res) => {
   let accessToken = req.body.accessToken;
   let id = req.params.id;

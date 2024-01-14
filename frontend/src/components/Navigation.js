@@ -1,22 +1,39 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import SpotifyLogo from "../assets/images/spotify_logo.png";
 
 const Navigation = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+  const isArtistsPage = location.pathname.includes("/artists");
+
+  const getNavItemClass = (isActive) => {
+    return `block py-2 px-3 rounded ${
+      isActive
+        ? "text-spotify-green"
+        : "text-white hover:text-spotify-green hover:bg-transparent"
+    }`;
+  };
+
   return (
-    <nav class="bg-white dark:bg-spotify-black fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <nav className="bg-white dark:bg-spotify-black fixed w-full z-20 top-0 start-0">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4 h-16">
         <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          {/* <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" /> */}
-          <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            music-api
+          <img src={SpotifyLogo} class="h-8" alt="Spotify Logo" />
+          <span
+            className="self-center text-2xl font-gotham whitespace-nowrap dark:text-white align-middle"
+            style={{ lineHeight: "1" }}
+          >
+            Spotify API
           </span>
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
-            type="button"
-            class="text-spotify-black bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-spotify-green hover:text-white"
-          >
-            Get started
-          </button>
+          {/*<button*/}
+          {/*  type="button"*/}
+          {/*  class="text-spotify-black bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-spotify-green hover:text-white"*/}
+          {/*>*/}
+          {/*  Get started*/}
+          {/*</button>*/}
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -42,27 +59,25 @@ const Navigation = () => {
             </svg>
           </button>
         </div>
-        <div
-          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-          id="navbar-sticky"
-        >
-          <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-spotify-black md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-spotify-black md:dark:bg-spotify-black dark:border-gray-700">
+        <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 mt-[-12px]">
+          <ul className="flex flex-col md:flex-row p-4 md:p-0 mt-4 font-medium font-gotham border border-gray-100 rounded-lg bg-spotify-black md:space-x-8 rtl:space-x-reverse md:border-0 md:bg-white dark:bg-spotify-black md:dark:bg-spotify-black dark:border-gray-700">
             <li>
-              <a
-                href="#"
-                class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-spotify-green md:p-0 md:dark:text-spotify-green"
-                aria-current="page"
+              <Link
+                to="/"
+                className={getNavItemClass(isHomePage)}
+                aria-current={isHomePage ? "page" : undefined}
               >
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/artists"
-                class="block py-2 px-3 text-gray-900 rounded hover:text-spotify-green md:hover:bg-transparent md:hover:text-spotify-green md:p-0 md:dark:hover:text-spotify-green dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+              <Link
+                to="/artists"
+                className={getNavItemClass(isArtistsPage)}
+                aria-current={isArtistsPage ? "page" : undefined}
               >
                 Artists
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
