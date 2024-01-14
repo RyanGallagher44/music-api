@@ -13,10 +13,9 @@ const PlayTrack = ({ id }) => {
         const { data } = await axios.post(`http://localhost:3030/track/${id}`, {
           accessToken: localStorage.getItem("access_token"),
         });
-        console.log(data);
         setTrack(data);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       } finally {
         setLoading(false);
       }

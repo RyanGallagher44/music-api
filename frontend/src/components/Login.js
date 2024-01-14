@@ -22,7 +22,6 @@ const Login = () => {
             },
           });
           setUserData(data);
-          console.log(data);
           const data2 = await axios.get(
             "https://api.spotify.com/v1/me/following?type=artist",
             {
@@ -32,9 +31,9 @@ const Login = () => {
             },
           );
           setUserFollowingData(data2.data.artists.items);
-
-          setLoading(false);
         } catch (e) {
+          console.error(e);
+        } finally {
           setLoading(false);
         }
       };
@@ -61,20 +60,22 @@ const Login = () => {
       )}
       {token && !loading && (
         <div>
-          <h1 className="mt-36">Welcome, {userData.display_name}</h1>
+          <h1 className="mt-36 font-gotham">
+            Welcome, {userData.display_name}
+          </h1>
           {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                        {userFollowingData.map((artist) => (
-                            <div key={artist.id}>
-                                <div className="col-span-1 justify-center items-center flex">
-                                    <img
-                                        className="transform transition duration-500 hover:scale-105 w-72 h-72 object-cover rounded-full"
-                                        src={artist.images[0].url}
-                                        alt=""
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                    </div> */}
+                  {userFollowingData.map((artist) => (
+                      <div key={artist.id}>
+                          <div className="col-span-1 justify-center items-center flex">
+                              <img
+                                  className="transform transition duration-500 hover:scale-105 w-72 h-72 object-cover rounded-full"
+                                  src={artist.images[0].url}
+                                  alt=""
+                              />
+                          </div>
+                      </div>
+                  ))}
+              </div> */}
         </div>
       )}
     </div>
