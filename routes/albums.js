@@ -35,12 +35,10 @@ router.post("/:id/audio-analysis", async (req, res) => {
 });
 
 router.post("/:id", async (req, res) => {
-    const { id } = req.params;
-    const { accessToken } = req.body;
-    const data = await spotify(`/albums/${id}/tracks?market=US
-    `, accessToken);
-    res.json(data)
-})
-
+  const { id } = req.params;
+  const { accessToken } = req.body;
+  const data = await spotify(`/albums/${id}/tracks?market=US`, accessToken);
+  res.json(data);
+});
 
 export default router;

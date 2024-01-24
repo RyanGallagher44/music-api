@@ -26,15 +26,13 @@ const Album = () => {
           {
             accessToken: localStorage.getItem("access_token"),
           },
-          );
-          setAudioAnalysis(data);
-          const moreData = await axios.post(`http://localhost:3030/album/${id}`, 
-          {
-              accessToken: localStorage.getItem("access_token"),
-            },
-            )
-            console.log(moreData.data)
-            setalbumTracks(moreData.data)
+        );
+        setAudioAnalysis(data);
+        const moreData = await axios.post(`http://localhost:3030/album/${id}`, {
+          accessToken: localStorage.getItem("access_token"),
+        });
+        console.log(moreData.data);
+        setalbumTracks(moreData.data);
       } catch (e) {
         console.error(e);
       } finally {
@@ -42,16 +40,14 @@ const Album = () => {
       }
     }
 
-
-
     fetchData();
   }, [id]);
-        const handleTrackHover = (id) => {
+  const handleTrackHover = (id) => {
     setHoveredTrack(id);
   };
 
-        const handleTrackLeave = () => {
-        setHoveredTrack(null);
+  const handleTrackLeave = () => {
+    setHoveredTrack(null);
   };
   if (loading) {
     return <Loading />;
@@ -59,17 +55,21 @@ const Album = () => {
     return (
       <div className="m-36">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {albumTracks.items.map((track) => {
-                return (
-                  <div>
-                    <h6 onMouseOver={() => handleTrackHover(track.id)}
-                      onMouseLeave={handleTrackLeave}> {track.track_number} {track.name} Time: {millisToMinutesAndSeconds(track.duration_ms)}</h6>
-                    {hoveredTrack === track.id && <PlayTrack id={track.id} />}
-
-                  </div>
-                );
-              })}
-            </div>
+          {albumTracks.items.map((track) => {
+            return (
+              <div>
+                <h6
+                  onMouseOver={() => handleTrackHover(track.id)}
+                  onMouseLeave={handleTrackLeave}
+                >
+                  {track.track_number} {track.name} Time:{" "}
+                  {millisToMinutesAndSeconds(track.duration_ms)}
+                </h6>
+                {hoveredTrack === track.id && <PlayTrack id={track.id} />}
+              </div>
+            );
+          })}
+        </div>
         <ul className="font-gotham text-left">
           <li>Average Track Duration: {audioAnalysis.duration}</li>
           <li>Average Key: {audioAnalysis.key}</li>
