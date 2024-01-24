@@ -24,6 +24,7 @@ const Artist = () => {
         },
       );
       setTracks(data.tracks);
+      
       const albumData = await axios.post(
         `http://localhost:3030/artist/${id}/albums?market=US`,
         {
