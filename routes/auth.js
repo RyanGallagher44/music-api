@@ -4,6 +4,8 @@ const router = Router();
 import querystring from "node:querystring";
 import { config } from "dotenv";
 import axios from "axios";
+import { spotify } from "./helpers.js";
+import { users } from "../config/mongoCollections.js";
 
 config();
 
@@ -47,10 +49,20 @@ router.get("/callback", async (req, res) => {
 
     const accessToken = tokenResponse.data.access_token;
 
-    res.redirect(`http://localhost:3000/?token=${accessToken}`);
+    const data = await spotify("/me", accessToken);
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({ id: data.id });
+    if (user === null) {
+      await userCollection.insertOne(data);
+
+      return res.redirect(`http://localhost:3000/?token=${accessToken}`);
+    } else {
+      return res.redirect(`http://localhost:3000/?token=${accessToken}`);
+    }
   } catch (error) {
     console.error("Error exchanging code for access token:", error.message);
-    res.status(500).send("Error during authentication");
+    return res.status(500).send("Error during authentication");
   }
 });
 
