@@ -49,28 +49,13 @@ const Album = () => {
   const handleTrackLeave = () => {
     setHoveredTrack(null);
   };
+
   if (loading) {
     return <Loading />;
   } else {
     return (
       <div className="m-36">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {albumTracks.items.map((track) => {
-            return (
-              <div>
-                <h6
-                  onMouseOver={() => handleTrackHover(track.id)}
-                  onMouseLeave={handleTrackLeave}
-                >
-                  {track.track_number} {track.name} Time:{" "}
-                  {millisToMinutesAndSeconds(track.duration_ms)}
-                </h6>
-                {hoveredTrack === track.id && <PlayTrack id={track.id} />}
-              </div>
-            );
-          })}
-        </div>
-        <ul className="font-gotham text-left">
+        <ul className="font-gotham text-left mb-12">
           <li>Average Track Duration: {audioAnalysis.duration}</li>
           <li>Average Key: {audioAnalysis.key}</li>
           <li>Average Tempo: {Math.round(audioAnalysis.tempo)} BPM</li>
@@ -87,6 +72,27 @@ const Album = () => {
           <li>Speechiness Level: {audioAnalysis.speechiness.toFixed(1)}%</li>
           <li>Valence Level: {audioAnalysis.valence.toFixed(1)}%</li>
         </ul>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {albumTracks.items.map((track) => {
+            return (
+              <div
+                className="flex items-center space-x-4 rtl:space-x-reverse hover:bg-spotify-green p-4 rounded-2xl font-gotham text-gray-900 dark:text-gray-900"
+                onMouseOver={() => handleTrackHover(track.id)}
+                onMouseLeave={handleTrackLeave}
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-left">{track.name}</p>
+                  <p className="text-sm text-left">
+                    {millisToMinutesAndSeconds(track.duration_ms)}
+                  </p>
+                </div>
+                <div className="items-center">{track.track_number}</div>
+                {hoveredTrack === track.id && <PlayTrack id={track.id} />}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

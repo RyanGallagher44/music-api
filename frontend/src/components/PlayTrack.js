@@ -32,14 +32,14 @@ const PlayTrack = ({ id }) => {
     return <div></div>;
   } else {
     return (
-      <div style={{ display: "none" }}>
+      <div>
         {track.preview_url && (
           <ReactPlayer
             url={track.preview_url}
             playing={true}
             loop={true}
-            width="100%"
-            height="50px"
+            width="0px"
+            height="0px"
             onReady={handlePlayerReady}
           />
         )}
