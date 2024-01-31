@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import PlayTrack from "./PlayTrack";
@@ -11,6 +10,7 @@ const Artist = () => {
   const [artist, setArtist] = useState(undefined);
   const [tracks, setTracks] = useState(undefined);
   const [albums, setAlbums] = useState(undefined);
+  const [user, setUser] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [hoveredTrack, setHoveredTrack] = useState(undefined);
   const { id } = useParams();
@@ -24,7 +24,7 @@ const Artist = () => {
         },
       );
       setTracks(data.tracks);
-      
+
       const albumData = await axios.post(
         `http://localhost:3030/artist/${id}/albums?market=US`,
         {
@@ -46,12 +46,39 @@ const Artist = () => {
     fetchData();
   }, [id]);
 
+  async function fetchUser() {
+    const { data } = await axios.get(
+      `http://localhost:3030/user/${JSON.parse(localStorage.getItem("spotify-profile")).id}`,
+    );
+    setUser(data);
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   const handleTrackHover = (id) => {
     setHoveredTrack(id);
   };
 
   const handleTrackLeave = () => {
     setHoveredTrack(null);
+  };
+
+  const handleLike = async (artistId) => {
+    await axios.post(`http://localhost:3030/user/like`, {
+      userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+      artistId: artistId,
+    });
+    fetchUser();
+  };
+
+  const handleUnlike = async (artistId) => {
+    await axios.post(`http://localhost:3030/user/unlike`, {
+      userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+      artistId: artistId,
+    });
+    fetchUser();
   };
 
   if (loading) {
@@ -71,13 +98,36 @@ const Artist = () => {
             <h2 className="text-2xl font-bold mb-2 font-gotham mr-12">
               {artist.name}
             </h2>
-            <p className="font-gotham mr-12">
-              {numeral(artist.followers.total)
-                .format("0.0a")
-                .replace("m", "M")
-                .replace("k", "K")}{" "}
-              followers
-            </p>
+            <div className="flex">
+              {!user.artists.includes(artist.id) && (
+                <button
+                  id="like"
+                  type="button"
+                  onClick={() => handleLike(artist.id)}
+                  className="h-10 w-10 transform mr-2 rounded-full border-2 border-green-500 bg-white text-xl text-green-500 duration-500 hover:bg-white hover:scale-125"
+                >
+                  <i className="fas fa-heart"></i>
+                </button>
+              )}
+              {user.artists.includes(artist.id) && (
+                <button
+                  id="unlike"
+                  type="button"
+                  onClick={() => handleUnlike(artist.id)}
+                  className="h-10 w-10 transform mr-2 rounded-full border-2 border-green-500 bg-white text-xl text-red-500 duration-500 hover:bg-white hover:scale-125"
+                >
+                  <i className="fas fa-heart"></i>
+                </button>
+              )}
+              <p className="font-gotham mr-12 m-auto">
+                {numeral(artist.followers.total)
+                  .format("0.0a")
+                  .replace("m", "M")
+                  .replace("k", "K")
+                  .replace("b", "B")}{" "}
+                followers
+              </p>
+            </div>
             <div className="flex flex-col gap-2 mt-4 mr-12">
               {artist.genres.map((genre) => {
                 return (

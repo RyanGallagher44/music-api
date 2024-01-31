@@ -66,27 +66,27 @@ export default function SearchArtists() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
           {artistData.map((artist) => {
             return (
-              <Link to={`/artist/${artist.id}`}>
-                <div
-                  key={artist.id}
-                  className="relative group overflow-hidden rounded-full"
-                >
-                  <div className="col-span-1 justify-center items-center flex">
-                    {artist.images.length > 0 && (
-                      <img
-                        className="transform transition duration-500 group-hover:scale-105 rounded-full"
-                        src={artist.images[0].url}
-                        alt=""
-                      />
-                    )}
+                <Link to={`/artist/${artist.id}`}>
+                  <div
+                      key={artist.id}
+                      className="relative group overflow-hidden rounded-full"
+                  >
+                    <div className="col-span-1 justify-center items-center flex">
+                      {artist.images.length > 0 && (
+                          <img
+                              className="transform transition duration-500 group-hover:scale-105 rounded-full"
+                              src={artist.images[0].url}
+                              alt=""
+                          />
+                      )}
+                    </div>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 animate-glow">
+                      <p className="text-white text-lg font-bold font-gotham">
+                        {artist.name}
+                      </p>
+                    </div>
                   </div>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 animate-glow">
-                    <p className="text-white text-lg font-bold font-gotham">
-                      {artist.name}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+                </Link>
             );
           })}
         </div>
