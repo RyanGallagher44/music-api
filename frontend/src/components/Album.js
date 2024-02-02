@@ -105,7 +105,7 @@ const Album = () => {
           {albumTracks.items.map((track) => {
             return (
               <div
-                className="flex items-center space-x-4 rtl:space-x-reverse hover:bg-spotify-green p-4 rounded-2xl font-gotham text-gray-900 dark:text-gray-900"
+                className="flex items-center space-x-4 rtl:space-x-reverse duration-500 hover:bg-spotify-green p-4 rounded-2xl font-gotham text-gray-900 dark:text-gray-900"
                 onMouseOver={() => handleTrackHover(track.id)}
                 onMouseLeave={handleTrackLeave}
               >
