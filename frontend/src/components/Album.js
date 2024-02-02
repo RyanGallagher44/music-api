@@ -8,6 +8,7 @@ const Album = () => {
   const [loading, setLoading] = useState(true);
   const [audioAnalysis, setAudioAnalysis] = useState(undefined);
   const { id } = useParams();
+  const [user, setUser] = useState(undefined);
   const [albumTracks, setalbumTracks] = useState(undefined);
   const [hoveredTrack, setHoveredTrack] = useState(undefined);
   const millisToMinutesAndSeconds = (millis) => {
@@ -25,7 +26,7 @@ const Album = () => {
           `http://localhost:3030/album/${id}/audio-analysis`,
           {
             accessToken: localStorage.getItem("access_token"),
-          },
+          }
         );
         setAudioAnalysis(data);
         const moreData = await axios.post(`http://localhost:3030/album/${id}`, {
@@ -48,6 +49,33 @@ const Album = () => {
 
   const handleTrackLeave = () => {
     setHoveredTrack(null);
+  };
+
+  async function fetchUser() {
+    const { data } = await axios.get(
+      `http://localhost:3030/user/${JSON.parse(localStorage.getItem("spotify-profile")).id}`
+    );
+    setUser(data);
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const handleLike = async (trackId) => {
+    await axios.post(`http://localhost:3030/user/track/like`, {
+      userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+      trackId: trackId,
+    });
+    fetchUser();
+  };
+
+  const handleUnlike = async (trackId) => {
+    await axios.post(`http://localhost:3030/user/track/unlike`, {
+      userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+      tracktId: trackId,
+    });
+    fetchUser();
   };
 
   if (loading) {
@@ -87,7 +115,36 @@ const Album = () => {
                     {millisToMinutesAndSeconds(track.duration_ms)}
                   </p>
                 </div>
-                <div className="items-center">{track.track_number}</div>
+                <div className="items-center">
+                <div>
+                  {!user.tracks.includes(track.id) && (
+                    <button
+                      id="like"
+                      type="button"
+                      onClick={() => handleLike(track.id)}
+                      className="h-10 w-10 transform mr-2 rounded-full border-2 border-green-500 bg-gray-500 text-xl text-green-500 duration-500 hover:bg-white hover:scale-125"
+                    >
+                      <i className="fas fa-heart"></i>
+                    </button>
+                  )}
+                </div>
+                <div>
+                  {user.tracks.includes(track.id) && (
+                    <button
+                      id="unlike"
+                      type="button"
+                      onClick={() => handleUnlike(track.id)}
+                      className="h-10 w-10 transform mr-2 rounded-full border-2 border-green-500 bg-gray-500 text-xl text-red-500 duration-500 hover:bg-white hover:scale-125"
+                    >
+                      <i className="fas fa-heart"></i>
+                    </button>
+                  )}
+                </div>
+                    <div>
+                    {track.track_number}
+                    </div>
+                    </div>
+                
                 {hoveredTrack === track.id && <PlayTrack id={track.id} />}
               </div>
             );

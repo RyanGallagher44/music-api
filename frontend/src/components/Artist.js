@@ -66,7 +66,7 @@ const Artist = () => {
   };
 
   const handleLike = async (artistId) => {
-    await axios.post(`http://localhost:3030/user/like`, {
+    await axios.post(`http://localhost:3030/user/artist/like`, {
       userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
       artistId: artistId,
     });
@@ -74,7 +74,7 @@ const Artist = () => {
   };
 
   const handleUnlike = async (artistId) => {
-    await axios.post(`http://localhost:3030/user/unlike`, {
+    await axios.post(`http://localhost:3030/user/artist/unlike`, {
       userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
       artistId: artistId,
     });

@@ -12,14 +12,14 @@ router.get("/:id", async (req, res) => {
   res.json(user);
 });
 
-router.post("/like", async (req, res) => {
+router.post("/artist/like", async (req, res) => {
   const userCollection = await users();
   const { userId } = req.body;
   const { artistId } = req.body;
 
   await userCollection.updateOne(
     { id: userId },
-    { $push: { artists: artistId } },
+    { $push: { artists: artistId } }
   );
 
   res.json({
@@ -27,19 +27,48 @@ router.post("/like", async (req, res) => {
   });
 });
 
-router.post("/unlike", async (req, res) => {
+router.post("/artist/unlike", async (req, res) => {
   const userCollection = await users();
   const { userId } = req.body;
   const { artistId } = req.body;
 
   await userCollection.updateOne(
     { id: userId },
-    { $pull: { artists: artistId } },
+    { $pull: { artists: artistId } }
   );
 
   res.json({
     success: `User ${userId} unliked artist ${artistId}`,
   });
 });
+
+router.post("/track/like", async (req, res) => {
+  const userCollection = await users();
+  const { userId } = req.body;
+  const { trackId } = req.body;
+
+  await userCollection.updateOne(
+    { id: userId },
+    { $push: { tracks: trackId } }
+  );
+  res.json({
+    success: `User ${userId} liked track ${trackId}`,
+  });
+});
+
+router.post("/track/unlike", async (req, res) => {
+    const userCollection = await users();
+    const { userId } = req.body;
+    const { trackId } = req.body;
+  
+    await userCollection.updateOne(
+      { id: userId },
+      { $pull: { tracks: trackId } }
+    );
+  
+    res.json({
+      success: `User ${userId} unliked track ${trackId}`,
+    });
+  });
 
 export default router;
