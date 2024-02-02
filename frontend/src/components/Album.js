@@ -26,7 +26,7 @@ const Album = () => {
           `http://localhost:3030/album/${id}/audio-analysis`,
           {
             accessToken: localStorage.getItem("access_token"),
-          }
+          },
         );
         setAudioAnalysis(data);
         const moreData = await axios.post(`http://localhost:3030/album/${id}`, {
@@ -53,7 +53,7 @@ const Album = () => {
 
   async function fetchUser() {
     const { data } = await axios.get(
-      `http://localhost:3030/user/${JSON.parse(localStorage.getItem("spotify-profile")).id}`
+      `http://localhost:3030/user/${JSON.parse(localStorage.getItem("spotify-profile")).id}`,
     );
     setUser(data);
   }
@@ -73,7 +73,7 @@ const Album = () => {
   const handleUnlike = async (trackId) => {
     await axios.post(`http://localhost:3030/user/track/unlike`, {
       userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
-      tracktId: trackId,
+      trackId: trackId,
     });
     fetchUser();
   };
@@ -116,36 +116,33 @@ const Album = () => {
                   </p>
                 </div>
                 <div className="items-center">
-                <div>
-                  {!user.tracks.includes(track.id) && (
-                    <button
-                      id="like"
-                      type="button"
-                      onClick={() => handleLike(track.id)}
-                      className="h-10 w-10 transform mr-2 rounded-full border-2 border-green-500 bg-gray-500 text-xl text-green-500 duration-500 hover:bg-white hover:scale-125"
-                    >
-                      <i className="fas fa-heart"></i>
-                    </button>
-                  )}
+                  <div>
+                    {!user.tracks.includes(track.id) && (
+                      <button
+                        id="like"
+                        type="button"
+                        onClick={() => handleLike(track.id)}
+                        className="h-10 w-10 transform rounded-full text-xl text-gray-500 duration-500 hover:scale-125"
+                      >
+                        <i className="fas fa-heart"></i>
+                      </button>
+                    )}
+                  </div>
+                  <div>
+                    {user.tracks.includes(track.id) && (
+                      <button
+                        id="unlike"
+                        type="button"
+                        onClick={() => handleUnlike(track.id)}
+                        className="h-10 w-10 transform rounded-full text-xl text-red-500 duration-500 hover:scale-125"
+                      >
+                        <i className="fas fa-heart"></i>
+                      </button>
+                    )}
+                  </div>
+                  <div>{track.track_number}</div>
+                  {hoveredTrack === track.id && <PlayTrack id={track.id} />}
                 </div>
-                <div>
-                  {user.tracks.includes(track.id) && (
-                    <button
-                      id="unlike"
-                      type="button"
-                      onClick={() => handleUnlike(track.id)}
-                      className="h-10 w-10 transform mr-2 rounded-full border-2 border-green-500 bg-gray-500 text-xl text-red-500 duration-500 hover:bg-white hover:scale-125"
-                    >
-                      <i className="fas fa-heart"></i>
-                    </button>
-                  )}
-                </div>
-                    <div>
-                    {track.track_number}
-                    </div>
-                    </div>
-                
-                {hoveredTrack === track.id && <PlayTrack id={track.id} />}
               </div>
             );
           })}
