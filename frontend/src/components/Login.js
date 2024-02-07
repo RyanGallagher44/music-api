@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import CreatePlaylistModal from "./CreatePlaylistModal";
 
 const Login = () => {
   const [userData, setUserData] = useState(undefined);
   const [userFollowingData, setUserFollowingData] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+
   const token =
     searchParams.get("token") || localStorage.getItem("access_token"); // Get token from URL or local storage
 
@@ -64,6 +66,9 @@ const Login = () => {
           <h1 className="mt-36 font-gotham">
             Welcome, {userData.display_name}
           </h1>
+          <div className="font-gotham mt-32">
+            <CreatePlaylistModal />
+          </div>
           {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
                   {userFollowingData.map((artist) => (
                       <div key={artist.id}>
