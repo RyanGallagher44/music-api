@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios"
 
 const CreatePlaylistModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -7,8 +8,12 @@ const CreatePlaylistModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const handleAddPlaylist = (e) => {
+  const handleAddPlaylist = async (e) => {
     e.preventDefault();
+    await axios.post(`http://localhost:3030/user/playlist`, {
+        userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+        playlistName: playlistName,
+    })
 
     setIsModalOpen(!isModalOpen);
     setPlaylistName("");
