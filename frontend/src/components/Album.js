@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "./Loading";
 import PlayTrack from "./PlayTrack";
+import AddToPlaylistModal from "./AddToPlaylistModal";
 
 const Album = () => {
   const [loading, setLoading] = useState(true);
@@ -83,23 +84,23 @@ const Album = () => {
   } else {
     return (
       <div className="m-36">
-        <ul className="font-gotham text-left mb-12">
-          <li>Average Track Duration: {audioAnalysis.duration}</li>
-          <li>Average Key: {audioAnalysis.key}</li>
-          <li>Average Tempo: {Math.round(audioAnalysis.tempo)} BPM</li>
-          <li>Average Mode: {audioAnalysis.mode === 1 ? "Major" : "Minor"}</li>
-          <li>Average Time Signature: {audioAnalysis.timeSignature}/4</li>
-          <li>Acousticness Level: {audioAnalysis.acousticness.toFixed(1)}%</li>
-          <li>Danceability Level: {audioAnalysis.danceability.toFixed(1)}%</li>
-          <li>Energy Level: {audioAnalysis.energy.toFixed(1)}%</li>
-          <li>Loudness Level: {audioAnalysis.loudness.toFixed(1)} dB</li>
-          <li>
-            Instrumentalness Level: {audioAnalysis.instrumentalness.toFixed(1)}%
-          </li>
-          <li>Liveness Level: {audioAnalysis.liveness.toFixed(1)}%</li>
-          <li>Speechiness Level: {audioAnalysis.speechiness.toFixed(1)}%</li>
-          <li>Valence Level: {audioAnalysis.valence.toFixed(1)}%</li>
-        </ul>
+        {/*<ul className="font-gotham text-left mb-12">*/}
+        {/*  <li>Average Track Duration: {audioAnalysis.duration}</li>*/}
+        {/*  <li>Average Key: {audioAnalysis.key}</li>*/}
+        {/*  <li>Average Tempo: {Math.round(audioAnalysis.tempo)} BPM</li>*/}
+        {/*  <li>Average Mode: {audioAnalysis.mode === 1 ? "Major" : "Minor"}</li>*/}
+        {/*  <li>Average Time Signature: {audioAnalysis.timeSignature}/4</li>*/}
+        {/*  <li>Acousticness Level: {audioAnalysis.acousticness.toFixed(1)}%</li>*/}
+        {/*  <li>Danceability Level: {audioAnalysis.danceability.toFixed(1)}%</li>*/}
+        {/*  <li>Energy Level: {audioAnalysis.energy.toFixed(1)}%</li>*/}
+        {/*  <li>Loudness Level: {audioAnalysis.loudness.toFixed(1)} dB</li>*/}
+        {/*  <li>*/}
+        {/*    Instrumentalness Level: {audioAnalysis.instrumentalness.toFixed(1)}%*/}
+        {/*  </li>*/}
+        {/*  <li>Liveness Level: {audioAnalysis.liveness.toFixed(1)}%</li>*/}
+        {/*  <li>Speechiness Level: {audioAnalysis.speechiness.toFixed(1)}%</li>*/}
+        {/*  <li>Valence Level: {audioAnalysis.valence.toFixed(1)}%</li>*/}
+        {/*</ul>*/}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {albumTracks.items.map((track) => {
@@ -116,29 +117,32 @@ const Album = () => {
                   </p>
                 </div>
                 <div className="items-center">
-                  <div>
-                    {!user.tracks.includes(track.id) && (
-                      <button
-                        id="like"
-                        type="button"
-                        onClick={() => handleLike(track.id)}
-                        className="h-10 w-10 transform rounded-full text-xl text-gray-500 duration-500 hover:scale-125"
-                      >
-                        <i className="fas fa-heart"></i>
-                      </button>
-                    )}
-                  </div>
-                  <div>
-                    {user.tracks.includes(track.id) && (
-                      <button
-                        id="unlike"
-                        type="button"
-                        onClick={() => handleUnlike(track.id)}
-                        className="h-10 w-10 transform rounded-full text-xl text-red-500 duration-500 hover:scale-125"
-                      >
-                        <i className="fas fa-heart"></i>
-                      </button>
-                    )}
+                  <div className="flex">
+                    <AddToPlaylistModal id={track.id} />
+                    <div>
+                      {!user.tracks.includes(track.id) && (
+                        <button
+                          id="like"
+                          type="button"
+                          onClick={() => handleLike(track.id)}
+                          className="h-10 w-10 transform rounded-full text-xl text-gray-500 duration-500 hover:scale-125"
+                        >
+                          <i className="fas fa-heart"></i>
+                        </button>
+                      )}
+                    </div>
+                    <div>
+                      {user.tracks.includes(track.id) && (
+                        <button
+                          id="unlike"
+                          type="button"
+                          onClick={() => handleUnlike(track.id)}
+                          className="h-10 w-10 transform rounded-full text-xl text-red-500 duration-500 hover:scale-125"
+                        >
+                          <i className="fas fa-heart"></i>
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div>{track.track_number}</div>
                   {hoveredTrack === track.id && <PlayTrack id={track.id} />}

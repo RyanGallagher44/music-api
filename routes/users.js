@@ -3,6 +3,20 @@ import { Router } from "express";
 const router = Router();
 import { users } from "../config/mongoCollections.js";
 
+/*
+  get all playlist names for current user
+ */
+router.get("/playlists", async (req, res) => {
+  // todo
+});
+
+/*
+  add given track id to user's playlist based on given playlist name
+ */
+router.post("/playlist/add", async (req, res) => {
+  // todo
+});
+
 router.get("/:id", async (req, res) => {
   const userCollection = await users();
   const { id } = req.params;
@@ -19,7 +33,7 @@ router.post("/artist/like", async (req, res) => {
 
   await userCollection.updateOne(
     { id: userId },
-    { $push: { artists: artistId } }
+    { $push: { artists: artistId } },
   );
 
   res.json({
@@ -34,7 +48,7 @@ router.post("/artist/unlike", async (req, res) => {
 
   await userCollection.updateOne(
     { id: userId },
-    { $pull: { artists: artistId } }
+    { $pull: { artists: artistId } },
   );
 
   res.json({
@@ -49,7 +63,7 @@ router.post("/track/like", async (req, res) => {
 
   await userCollection.updateOne(
     { id: userId },
-    { $push: { tracks: trackId } }
+    { $push: { tracks: trackId } },
   );
   res.json({
     success: `User ${userId} liked track ${trackId}`,
@@ -63,7 +77,7 @@ router.post("/track/unlike", async (req, res) => {
 
   await userCollection.updateOne(
     { id: userId },
-    { $pull: { tracks: trackId } }
+    { $pull: { tracks: trackId } },
   );
 
   res.json({
@@ -78,7 +92,7 @@ router.post("/playlist", async (req, res) => {
 
   await userCollection.updateOne(
     { id: userId },
-    { $push: {playlists: { name: playlistName, tracks: []}}}
+    { $push: { playlists: { name: playlistName, tracks: [] } } },
   );
 
   res.json({
