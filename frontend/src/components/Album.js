@@ -8,6 +8,7 @@ import AddToPlaylistModal from "./AddToPlaylistModal";
 const Album = () => {
   const [loading, setLoading] = useState(true);
   const [audioAnalysis, setAudioAnalysis] = useState(undefined);
+  const [playlists, setPlaylists] = useState(undefined);
   const { id } = useParams();
   const [user, setUser] = useState(undefined);
   const [albumTracks, setalbumTracks] = useState(undefined);
@@ -35,6 +36,13 @@ const Album = () => {
         });
         console.log(moreData.data);
         setalbumTracks(moreData.data);
+        const userPlaylists = await axios.post(
+          `http://localhost:3030/user/playlists`,
+          {
+            id: JSON.parse(localStorage.getItem("spotify-profile")).id,
+          },
+        );
+        setPlaylists(userPlaylists.data);
       } catch (e) {
         console.error(e);
       } finally {
@@ -118,7 +126,7 @@ const Album = () => {
                 </div>
                 <div className="items-center">
                   <div className="flex">
-                    <AddToPlaylistModal id={track.id} />
+                    <AddToPlaylistModal id={track.id} playlists={playlists} />
                     <div>
                       {!user.tracks.includes(track.id) && (
                         <button

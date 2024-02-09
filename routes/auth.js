@@ -56,6 +56,7 @@ router.get("/callback", async (req, res) => {
     if (user === null) {
       data.tracks = [];
       data.artists = [];
+      data.playlists = [];
       await userCollection.insertOne(data);
 
       return res.redirect(`http://localhost:3000/?token=${accessToken}`);

@@ -6,37 +6,34 @@ import { users } from "../config/mongoCollections.js";
 /*
   get all playlist names for current user
  */
-router.get("/playlists", async (req, res) => {
-    const playlistCollection = await users();
-    const { id } = req.body;
-    const user = await playlistCollection.findOne({ id: id });
+router.post("/playlists", async (req, res) => {
+  const playlistCollection = await users();
+  const { id } = req.body;
+  const user = await playlistCollection.findOne({ id: id });
 
-    res.json(user.playlists);
+  res.json(user.playlists);
 });
 
 /*
   add given track id to user's playlist based on given playlist name
  */
 router.post("/playlist/add", async (req, res) => {
-    const {userId} = req.body
-    const playlistCollection = await users();
-    const {playlistName} = req.body
-    const {trackId} = req.body
+  const { userId } = req.body;
+  const playlistCollection = await users();
+  const { playlistName } = req.body;
+  const { trackId } = req.body;
 
-    const user = await playlistCollection.findOne({ id: id });
-        user.playlists.forEach((playlist) => {
-            if (playlist.name == playlistName)  {
-               playlist.tracks.push(trackId)
-        }
-})
+  const user = await playlistCollection.findOne({ id: userId });
+  user.playlists.forEach((playlist) => {
+    if (playlist.name == playlistName) {
+      playlist.tracks.push(trackId);
+    }
+  });
 
-    await playlistCollection.replaceOne(
-        {id: userId},
-        user
-    )
-    res.json({
-        success: `Added ${trackId} to ${playlistName}`,
-      });
+  await playlistCollection.replaceOne({ id: userId }, user);
+  res.json({
+    success: `Added ${trackId} to ${playlistName}`,
+  });
 });
 
 router.get("/:id", async (req, res) => {

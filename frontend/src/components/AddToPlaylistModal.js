@@ -1,45 +1,25 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"
-import Loading from "./Loading"
+import axios from "axios";
+import Loading from "./Loading";
 
-const CreatePlaylistModal = ({ id }) => {
+const CreatePlaylistModal = ({ id, playlists }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [playlists, setPlaylists] = useState(undefined)
-  const [loading, setLoading] = useState[true]
-
-
-  
-  useEffect(() => {
-    async function fetchPlaylists() {
-        const { data } = axios.get(`http://localhost:3030/user/playlists`, {
-            userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
-        })
-        setPlaylists(data)
-        setLoading(false)
-    }
-    fetchPlaylists()
-  }, [id]);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
 
   const handleAddToPlaylist = async (playlistName) => {
-    await  axios.post(`http://localhost:3030/user/playlist/add`, {
-        userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
-        playlistName: playlistName,
-        trackId: id
-      });
+    await axios.post(`http://localhost:3030/user/playlist/add`, {
+      userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+      playlistName: playlistName,
+      trackId: id,
+    });
 
     setIsModalOpen(!isModalOpen);
   };
-  if (loading) {
-    return (
-        <Loading/>
-    )
-  } else {
-  return (
 
+  return (
     <div>
       <button
         data-modal-target="crud-modal"
@@ -102,20 +82,21 @@ const CreatePlaylistModal = ({ id }) => {
                 </div>
               </div>
               {playlists.map((playlist) => {
+                return (
                   <button
-                  onClick={() => handleAddToPlaylist(playlist.name)}
-                  className="bg-spotify-green duration-75 hover:scale-105 text-gray-800 py-2 px-4 rounded-full inline-flex items-center text-center font-medium"
+                    onClick={() => handleAddToPlaylist(playlist.name)}
+                    className="bg-spotify-green duration-75 hover:scale-105 text-gray-800 py-2 px-4 rounded-full inline-flex items-center text-center font-medium"
                   >
-                {playlist.name}
-              </button>
-            })}
+                    {playlist.name}
+                  </button>
+                );
+              })}
             </form>
           </div>
         </div>
       </div>
     </div>
-  )
-};
+  );
 };
 
 export default CreatePlaylistModal;
