@@ -1,24 +1,45 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios"
+import Loading from "./Loading"
 
 const CreatePlaylistModal = ({ id }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [playlists, setPlaylists] = useState(undefined)
+  const [loading, setLoading] = useState[true]
 
-  // need to fetch all user playlists, so we can display them when user is selecting a playlist to add the track to
-  useEffect(() => {}, []);
+
+  
+  useEffect(() => {
+    async function fetchPlaylists() {
+        const { data } = axios.get(`http://localhost:3030/user/playlists`, {
+            userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+        })
+        setPlaylists(data)
+        setLoading(false)
+    }
+    fetchPlaylists()
+  }, [id]);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const handleAddToPlaylist = (e) => {
-    e.preventDefault();
-
-    // handle the logic to make our backend call to add track id to playlist
+  const handleAddToPlaylist = async (playlistName) => {
+    await  axios.post(`http://localhost:3030/user/playlist/add`, {
+        userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+        playlistName: playlistName,
+        trackId: id
+      });
 
     setIsModalOpen(!isModalOpen);
   };
-
+  if (loading) {
+    return (
+        <Loading/>
+    )
+  } else {
   return (
+
     <div>
       <button
         data-modal-target="crud-modal"
@@ -80,21 +101,21 @@ const CreatePlaylistModal = ({ id }) => {
                   </label>
                 </div>
               </div>
-              {/*will need a map here to loop through the playlists*/}
-              <button
-                // will need to pass playlist name as argument to the onClick function
-                onClick={() => handleAddToPlaylist()}
-                className="bg-spotify-green duration-75 hover:scale-105 text-gray-800 py-2 px-4 rounded-full inline-flex items-center text-center font-medium"
-              >
-                {/*playlist name goes here*/}
+              {playlists.map((playlist) => {
+                  <button
+                  onClick={() => handleAddToPlaylist(playlist.name)}
+                  className="bg-spotify-green duration-75 hover:scale-105 text-gray-800 py-2 px-4 rounded-full inline-flex items-center text-center font-medium"
+                  >
+                {playlist.name}
               </button>
-              {/*ends map*/}
+            })}
             </form>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
+};
 };
 
 export default CreatePlaylistModal;
