@@ -119,4 +119,25 @@ router.post("/playlist", async (req, res) => {
   });
 });
 
+
+router.post("/playlist/tracks/:name", async (req,res) => {
+    const { accessToken } = req.body
+    const { name } = req.params
+    const { userId } = req.body
+    const userCollection = await users();
+    const user = await userCollection.findOne({ id: userId });
+    let trackArray = []
+    user.playlists.forEach((playlist) => {
+        if (playlist.name == name) {
+          trackArray = playlist.tracks;
+        }
+      });
+    let trackDetails = []
+    for (let i = 0; i < trackArray.length; i ++) {
+        const data = await spotify(`/tracks/${trackArray[i]}`, accessToken);
+        trackDetails.push(data)
+    }
+  res.json(trackDetails);
+})
+
 export default router;
