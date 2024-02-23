@@ -5,7 +5,7 @@ import Loading from "./Loading";
 
 
 const Playlist = () => {
-    const [track, setTrack] = useState(undefined)
+    const [tracks, setTracks] = useState(undefined)
     const [loading, setLoading] = useState(true)
     const { name } = useParams();
 
@@ -19,7 +19,7 @@ useEffect(() => {
             },
             )
             console.log(data)
-            setTrack(data)
+            setTracks(data)
             setLoading(false)
     }
     fetchData()
@@ -30,7 +30,35 @@ if (loading) {
 } else {
     return (
         <div className="mt-36">
-            
+            {tracks.map((track) => {
+                return (
+                    <div>
+                    <div>
+                    
+                    </div>
+                   <div>
+                {track.artists.map((artist) => {
+                    return (
+                        <div>
+                        {artist.name}: {track.name}
+                        </div>
+                    )
+                })}
+                    </div>
+                   {track.album.images.map((image) => {
+                    return (
+                        <div>
+                        <img
+                          alt={image.name}
+                          className="transform transition duration-500 group-hover:scale-105 object-cover rounded-full"
+                          src={image.url[0]}
+                        />
+                        </div>
+                    )
+                   })}
+                    </div>
+                )
+            })}
         </div>
     )
 }
