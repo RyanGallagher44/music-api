@@ -3,71 +3,58 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "./Loading";
 
-
 const Playlist = () => {
-    const [tracks, setTracks] = useState(undefined)
-    const [loading, setLoading] = useState(true)
-    const { name } = useParams();
-    const millisToMinutesAndSeconds = (millis) => {
-        let minutes = Math.floor(millis / 60000);
-        let seconds = ((millis % 60000) / 1000).toFixed(0);
-        return seconds === 60
-          ? minutes + 1 + ":00"
-          : minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-      };
+  const [tracks, setTracks] = useState(undefined);
+  const [loading, setLoading] = useState(true);
+  const { name } = useParams();
+  const millisToMinutesAndSeconds = (millis) => {
+    let minutes = Math.floor(millis / 60000);
+    let seconds = ((millis % 60000) / 1000).toFixed(0);
+    return seconds === 60
+      ? minutes + 1 + ":00"
+      : minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  };
 
-useEffect(() => {
-    async function fetchData () {
-        const { data } = await axios.post(
-            `http://localhost:3030/user/playlist/tracks/${name}`, 
-            {
-                userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
-                accessToken: localStorage.getItem("access_token")
-            },
-            )
-            console.log(data)
-            setTracks(data)
-            setLoading(false)
+  useEffect(() => {
+    async function fetchData() {
+      const { data } = await axios.post(
+        `http://localhost:3030/user/playlist/tracks/${name}`,
+        {
+          userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+          accessToken: localStorage.getItem("access_token"),
+        }
+      );
+      console.log(data);
+      setTracks(data);
+      setLoading(false);
     }
-    fetchData()
-}, [])
+    fetchData();
+  }, []);
 
-if (loading) {
-    return <Loading />
-} else {
+  if (loading) {
+    return <Loading />;
+  } else {
     return (
-        <div className="mt-36">
-            {tracks.map((track) => {
-                return (
-                    <div>
-                    <div>
-                    
-                    </div>
-                   <div>
+      <div className="mt-36">
+        {tracks.map((track) => {
+          return (
+            <div>
+              <div></div>
+              <div>
                 {track.artists.map((artist) => {
-                    return (
-                        <div>
-                        {track.name}: {artist.name} {millisToMinutesAndSeconds(track.duration_ms)}
-                        </div>
-                    )
+                  return (
+                    <div>
+                      {track.name}: {artist.name}{" "}
+                      {millisToMinutesAndSeconds(track.duration_ms)}
+                    </div>
+                  );
                 })}
-                    </div>
-                   {track.album.images.map((image) => {
-                    return (
-                        <div>
-                        <img
-                          alt={image.name}
-                          className="transform transition duration-500 group-hover:scale-105 object-cover rounded-full"
-                          src={image.url[0]}
-                        />
-                        </div>
-                    )
-                   })}
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
-}
-export default Playlist
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+};
+export default Playlist;
