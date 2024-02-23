@@ -6,7 +6,7 @@ const Navigation = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isArtistsPage = location.pathname.includes("/artists");
-  const isPlayistPage = location.pathname === "/playlists";
+  const isPlaylistPage = location.pathname === "/playlists";
 
   const getNavItemClass = (isActive) => {
     return `block py-2 px-3 rounded ${
@@ -75,7 +75,7 @@ const Navigation = () => {
               <Link
                 to="/playlists"
                 className={getNavItemClass(isHomePage)}
-                aria-current={isHomePage ? "page" : undefined}
+                aria-current={isPlaylistPage ? "page" : undefined}
               >
                 Playlists
               </Link>
