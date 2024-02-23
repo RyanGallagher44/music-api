@@ -14,7 +14,8 @@ useEffect(() => {
         const { data } = await axios.post(
             `http://localhost:3030/user/playlist/tracks/${name}`, 
             {
-                Id: JSON.parse(localStorage.getItem("spotify-profile")).id,
+                userId: JSON.parse(localStorage.getItem("spotify-profile")).id,
+                accessToken: localStorage.getItem("access_token")
             },
             )
             console.log(data)
