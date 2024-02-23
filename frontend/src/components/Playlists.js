@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "./Loading";
+import { Link } from "react-router-dom";
 
 
 const Playlists = () => {
@@ -30,7 +31,9 @@ if (loading) {
         {playlists.map((playlist) => {
             return (
                 <div>
+                <Link to={`/playlist/${playlist.name}`}>
                     {playlist.name}
+                </Link>
                 </div>
             )
         })}
