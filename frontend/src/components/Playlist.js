@@ -8,6 +8,13 @@ const Playlist = () => {
     const [tracks, setTracks] = useState(undefined)
     const [loading, setLoading] = useState(true)
     const { name } = useParams();
+    const millisToMinutesAndSeconds = (millis) => {
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        return seconds === 60
+          ? minutes + 1 + ":00"
+          : minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      };
 
 useEffect(() => {
     async function fetchData () {
@@ -40,7 +47,7 @@ if (loading) {
                 {track.artists.map((artist) => {
                     return (
                         <div>
-                        {artist.name}: {track.name}
+                        {track.name}: {artist.name} {millisToMinutesAndSeconds(track.duration_ms)}
                         </div>
                     )
                 })}
