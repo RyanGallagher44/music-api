@@ -13,7 +13,7 @@ export default function SearchArtists() {
       return;
     }
 
-    const { data } = await axios.post("http://localhost:3030/artist/search", {
+    const { data } = await axios.post("http://localhost:3030/track/search", {
       searchTerm: artist,
       accessToken: localStorage.getItem("access_token"),
     });

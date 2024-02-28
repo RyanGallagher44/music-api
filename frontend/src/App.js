@@ -7,6 +7,7 @@ import Artist from "./components/Artist";
 import Album from "./components/Album";
 import Playlist from "./components/Playlist"
 import Playlists from "./components/Playlists"
+import Game from "./components/Game"
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/album/:id" element={<Album />} />
             <Route path="/playlist/:name" element={<Playlist />} />
             <Route path="/playlists" element={<Playlists />} />
+            <Route path="/game" element={<Game />} />
           </Routes>
         </div>
       </div>
