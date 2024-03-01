@@ -80,6 +80,15 @@ const Navigation = () => {
                 Playlists
               </Link>
             </li>
+            <li>
+              <Link
+                to="/game"
+                className={getNavItemClass(isHomePage)}
+                aria-current={isPlaylistPage ? "page" : undefined}
+              >
+                Heardle
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
