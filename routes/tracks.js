@@ -23,10 +23,13 @@ function getRandomSearch() {
     return randomSearch;
   }
 
+
+
 router.post("/search", async (req, res) => {
     const { accessToken } = req.body;
     console.log(getRandomSearch())
-    const data = await spotify(`/search?q=${getRandomSearch()}&type=track&limit=1`, accessToken);
+    var random = Math.floor(Math.random() * 1001); 
+    const data = await spotify(`/search?q=${getRandomSearch()}&type=track&offset=${random}&limit=1&market=US`, accessToken);
     res.json(data);
 })
 
