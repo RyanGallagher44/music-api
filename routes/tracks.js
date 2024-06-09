@@ -25,6 +25,10 @@ function getRandomSearch() {
   return randomSearch;
 }
 
+function sortTracksByPopularity(data) {
+  return data.tracks.items.sort((a, b) => b.popularity - a.popularity);
+}
+
 router.post("/search/:term", async (req, res) => {
   const { accessToken } = req.body;
   const { term } = req.params;
@@ -39,13 +43,19 @@ router.post("/search/:term", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   const { accessToken } = req.body;
-  console.log(getRandomSearch());
-  var random = Math.floor(Math.random() * 1001);
+  let random = Math.floor(Math.random() * 1001);
   const data = await spotify(
-    `/search?q=${getRandomSearch()}&type=track&offset=${random}&limit=1&market=US`,
+    `/search?q=${getRandomSearch()}&type=track&offset=${random}&limit=50&market=US`,
     accessToken,
   );
-  res.json(data);
+
+  const sortedData = sortTracksByPopularity(data);
+
+  res.json({
+    tracks: {
+      items: [sortedData[0]],
+    },
+  });
 });
 
 router.post("/:id", async (req, res) => {

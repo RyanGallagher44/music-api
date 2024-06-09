@@ -71,7 +71,7 @@ const Game = () => {
         `You got it! It was ${track.tracks.items[0].name} by ${track.tracks.items[0].artists[0].name}!`,
       );
     } else {
-      setGuessMessage("You're a dumbass. That's WRONG!");
+      setGuessMessage("Nope. That's wrong!");
       handleAddTime();
     }
 
@@ -81,7 +81,7 @@ const Game = () => {
   const handleSkip = () => {
     setIsCorrect(true);
     setGuessMessage(
-      `You're a fuckin' idiot! It was ${track.tracks.items[0].name} by ${track.tracks.items[0].artists[0].name}!`,
+      `Better luck next time! It was ${track.tracks.items[0].name} by ${track.tracks.items[0].artists[0].name}!`,
     );
     setShowAlert(true);
   };
