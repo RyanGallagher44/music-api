@@ -7,7 +7,7 @@ import AddToPlaylistModal from "./AddToPlaylistModal";
 
 const Album = () => {
   const [loading, setLoading] = useState(true);
-  const [audioAnalysis, setAudioAnalysis] = useState(undefined);
+  // audio analysis removed (Spotify deprecated audio-features)
   const [playlists, setPlaylists] = useState(undefined);
   const { id } = useParams();
   const [user, setUser] = useState(undefined);
@@ -22,26 +22,16 @@ const Album = () => {
   };
 
   useEffect(() => {
+
     async function fetchData() {
       try {
-        const { data } = await axios.post(
-          `http://localhost:3030/album/${id}/audio-analysis`,
-          {
-            accessToken: localStorage.getItem("access_token"),
-          },
-        );
-        setAudioAnalysis(data);
         const moreData = await axios.post(`http://localhost:3030/album/${id}`, {
           accessToken: localStorage.getItem("access_token"),
         });
-        console.log(moreData.data);
         setalbumTracks(moreData.data);
-        const userPlaylists = await axios.post(
-          `http://localhost:3030/user/playlists`,
-          {
-            id: JSON.parse(localStorage.getItem("spotify-profile")).id,
-          },
-        );
+        const userPlaylists = await axios.post(`http://localhost:3030/user/playlists`, {
+          id: JSON.parse(localStorage.getItem("spotify-profile")).id,
+        });
         setPlaylists(userPlaylists.data);
       } catch (e) {
         console.error(e);

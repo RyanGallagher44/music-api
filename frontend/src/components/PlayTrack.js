@@ -30,22 +30,25 @@ const PlayTrack = ({ id }) => {
 
   if (loading) {
     return <div></div>;
-  } else {
-    return (
-      <div>
-        {track.preview_url && (
-          <ReactPlayer
-            url={track.preview_url}
-            playing={true}
-            loop={true}
-            width="0px"
-            height="0px"
-            onReady={handlePlayerReady}
-          />
-        )}
-      </div>
-    );
   }
+
+  return (
+    <div>
+      {track && track.preview_url && (
+        <ReactPlayer
+          url={track.preview_url}
+          playing={true}
+          loop={true}
+          width="0px"
+          height="0px"
+          volume={0.5}
+          onReady={handlePlayerReady}
+        />
+      )}
+
+      {/* skip embed-only tracks: no UI shown when preview is missing */}
+    </div>
+  );
 };
 
 export default PlayTrack;

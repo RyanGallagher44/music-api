@@ -20,17 +20,46 @@ const Game = () => {
   const playerRef = useRef();
 
   useEffect(() => {
-    async function fetchData() {
-      const { data } = await axios.post("http://localhost:3030/track/search", {
-        accessToken: localStorage.getItem("access_token"),
-      });
+    let cancelled = false;
 
-      if (!data.tracks.items[0].preview_url) window.location.reload();
+    async function fetchData(attempt = 0) {
+      if (cancelled) return;
+      if (attempt > 5) {
+        setLoading(false);
+        setGuessMessage("Could not find a playable track. Try again later.");
+        setShowAlert(true);
+        return;
+      }
 
-      setTrack(data);
-      setLoading(false);
+      try {
+        const { data } = await axios.post("http://localhost:3030/track/search", {
+          accessToken: localStorage.getItem("access_token"),
+        });
+
+        if (
+          !data ||
+          !data.tracks ||
+          !data.tracks.items ||
+          !data.tracks.items[0] ||
+          !data.tracks.items[0].preview_url
+        ) {
+          // try again for a direct preview_url only (skip embed-only tracks)
+          return fetchData(attempt + 1);
+        }
+
+        setTrack(data);
+        setLoading(false);
+      } catch (err) {
+        // on network error, try again a limited number of times
+        return fetchData(attempt + 1);
+      }
     }
+
     fetchData();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handlePlayerReady = () => {
@@ -39,14 +68,23 @@ const Game = () => {
 
   const handleProgress = (progress) => {
     setTimeElapsed(progress.playedSeconds);
-    if (progress.playedSeconds > seconds) {
+    if (progress.playedSeconds >= seconds) {
       setIsPlaying(false);
-      playerRef.current.seekTo(0);
+      try {
+        playerRef.current.seekTo(0);
+      } catch (e) {}
+      setTimeElapsed(0);
     }
   };
 
   const handleAddTime = () => {
-    setSeconds(seconds + 2);
+    setSeconds((s) => s + 2);
+    // restart playback from 0 for the new allowed duration
+    setTimeElapsed(0);
+    try {
+      playerRef.current.seekTo(0);
+    } catch (e) {}
+    setIsPlaying(true);
   };
 
   const handleChange = async (e) => {
@@ -65,6 +103,11 @@ const Game = () => {
   const handleGuess = (e) => {
     e.preventDefault();
 
+    if (!track || !track.tracks || !track.tracks.items || !track.tracks.items[0]) {
+      // no track loaded — ignore guesses
+      return;
+    }
+
     if (userInput.toLowerCase() === track.tracks.items[0].name.toLowerCase()) {
       setIsCorrect(true);
       setGuessMessage(
@@ -79,6 +122,8 @@ const Game = () => {
   };
 
   const handleSkip = () => {
+    if (!track || !track.tracks || !track.tracks.items || !track.tracks.items[0]) return;
+
     setIsCorrect(true);
     setGuessMessage(
       `Better luck next time! It was ${track.tracks.items[0].name} by ${track.tracks.items[0].artists[0].name}!`,
@@ -86,7 +131,13 @@ const Game = () => {
     setShowAlert(true);
   };
 
-  if (loading) {
+  if (
+    loading ||
+    !track ||
+    !track.tracks ||
+    !track.tracks.items ||
+    !track.tracks.items[0]
+  ) {
     return <Loading />;
   } else {
     return (
@@ -106,15 +157,50 @@ const Game = () => {
           />
         )}
 
+        
+
         {showAlert && (
           <DismissibleAlert
             isCorrect={isCorrect}
             message={guessMessage}
             onClose={() => {
               setShowAlert(false);
-              if (isCorrect) {
-                window.location.reload();
-              }
+              // start a new round without reloading the page
+              setIsCorrect(false);
+              setPlayerReady(false);
+              setIsPlaying(true);
+              setSeconds(1);
+              setTimeElapsed(0);
+
+              // re-fetch a playable track
+              (async function restart() {
+                try {
+                  setLoading(true);
+                  const { data } = await axios.post("http://localhost:3030/track/search", {
+                    accessToken: localStorage.getItem("access_token"),
+                  });
+
+                  if (
+                    data &&
+                    data.tracks &&
+                    data.tracks.items &&
+                    data.tracks.items[0] &&
+                    data.tracks.items[0].preview_url
+                  ) {
+                    setTrack(data);
+                    setLoading(false);
+                  } else {
+                    // fallback: set loading false so user sees message
+                    setLoading(false);
+                    setGuessMessage("Could not find a playable track. Try again later.");
+                    setShowAlert(true);
+                  }
+                } catch (e) {
+                  setLoading(false);
+                  setGuessMessage("Network error. Try again later.");
+                  setShowAlert(true);
+                }
+              })();
             }}
           />
         )}
@@ -140,7 +226,17 @@ const Game = () => {
             >
               <path d="M405.2,232.9L126.8,67.2c-3.4-2-6.9-3.2-10.9-3.2c-10.9,0-19.8,9-19.8,20H96v344h0.1c0,11,8.9,20,19.8,20  c4.1,0,7.5-1.4,11.2-3.4l278.1-165.5c6.6-5.5,10.8-13.8,10.8-23.1C416,246.7,411.8,238.5,405.2,232.9z" />
             </svg>
-            <span>Play</span>
+            <span
+              onClick={() => {
+                try {
+                  playerRef.current.seekTo(0);
+                } catch (e) {}
+                setTimeElapsed(0);
+                setIsPlaying(true);
+              }}
+            >
+              Play
+            </span>
           </button>
           {seconds + 2 <= 30 && (
             <button
